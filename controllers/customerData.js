@@ -1,7 +1,5 @@
 const CustomerData = require("../models/CustomerData");
-// const { body, validationResult } = require("express-validator");
 
-// const fetchuser = require("../middleware/fetchuser");
 const jwt = require("jsonwebtoken");
 
 // Create a new CustomerData:
@@ -12,7 +10,6 @@ const createCustomerData = async (req, res) => {
       process.env.JWT_SECRET
     );
 
-    // check whether the customerData with this passport number already exists or not:
     let customerData = await CustomerData.findOne({
       passportNo: req.body.passportNo,
     });
@@ -30,7 +27,7 @@ const createCustomerData = async (req, res) => {
       email: req.body.email,
       age: req.body.age,
       gender: req.body.gender,
-      dateOfBirth: req.body.dateOfBirth,
+      dob: req.body.dob,
       passportNo: req.body.passportNo,
 
       createdAt: Date.now(),
@@ -92,7 +89,6 @@ const getCustomerDataById = async (req, res) => {
 const updateCustomerData = async (req, res) => {
   try {
     const { customerId } = req.params;
-    // check whether the customerData with this passport number already exists or not:
     if (req.body.passportNo) {
       const customerData = await CustomerData.findOne({
         passportNo: req.body.passportNo,

@@ -8,10 +8,39 @@ const {
   deleteBooking,
 } = require("../controllers/bookings");
 
-router.get("/getAllBookings", getAllBookings);
-router.post("/createBooking", createBooking);
-router.get("/getBooking/:bookingId", getBookingById);
-router.put("/updateBooking/:bookingId", updateBooking);
-router.delete("/deleteBooking/:bookingId", deleteBooking);
+const authenticateUser = require("../middleware/authentication");
+
+const {
+  ValidateCreateBooking,
+  ValidateIdString,
+  ValidateUpdateBooking,
+} = require("../middleware/bookingValidators");
+
+router.get("/getAllBookings", authenticateUser, getAllBookings);
+router.post(
+  "/createBooking",
+  authenticateUser,
+  ValidateCreateBooking,
+  createBooking
+);
+router.get(
+  "/getBooking/:bookingId",
+  authenticateUser,
+  ValidateIdString,
+  getBookingById
+);
+router.put(
+  "/updateBooking/:bookingId",
+  authenticateUser,
+  ValidateIdString,
+  ValidateUpdateBooking,
+  updateBooking
+);
+router.delete(
+  "/deleteBooking/:bookingId",
+  authenticateUser,
+  ValidateIdString,
+  deleteBooking
+);
 
 module.exports = router;

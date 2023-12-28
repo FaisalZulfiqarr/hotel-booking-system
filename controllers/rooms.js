@@ -1,7 +1,4 @@
 const Rooms = require("../models/Rooms");
-// const { body, validationResult } = require("express-validator");
-
-// const fetchuser = require("../middleware/fetchuser");
 const jwt = require("jsonwebtoken");
 
 // Create a new Room:
@@ -12,7 +9,6 @@ const createRoom = async (req, res) => {
       process.env.JWT_SECRET
     );
 
-    // check whether the room with this room number already exists or not:
     let room = await Rooms.findOne({ number: req.body.number });
 
     if (room) {

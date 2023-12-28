@@ -15,5 +15,4 @@ const RoomsSchema = new Schema({
   modifiedBy: { type: String, required: true },
 });
 const Rooms = mongoose.model("rooms", RoomsSchema);
-// Rooms.ensureIndex({ number: 1, floor: 1 }, { unique: true });
 module.exports = Rooms;

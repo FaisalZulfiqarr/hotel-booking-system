@@ -8,7 +8,6 @@ const BookingsSchema = new Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "rooms",
       required: true,
-      //   unique: true,
     },
   ],
   customerId: {
@@ -16,8 +15,6 @@ const BookingsSchema = new Schema({
     ref: "customerData",
     required: true,
   },
-  //   roomId: { type: String, required: true, unique: true },
-  //   customerId: { type: String, required: true },
   status: { type: String, required: true },
   payment: { type: Number, required: true },
   paidAmount: { type: Number, required: true },

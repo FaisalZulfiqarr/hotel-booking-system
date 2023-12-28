@@ -8,7 +8,7 @@ const CustomerDataSchema = new Schema({
   email: { type: String, unique: true },
   age: { type: Number },
   gender: { type: String },
-  dateOfBirth: { type: Date },
+  dob: { type: Date },
   passportNo: { type: String, required: true, unique: true },
 
   createdAt: { type: Date, default: Date.now },

@@ -7,11 +7,38 @@ const {
   updateCustomerData,
   deleteCustomerData,
 } = require("../controllers/customerData");
+const {
+  ValidateCreateCustomerData,
+  ValidateUpdateCustomerData,
+  ValidateIdString,
+} = require("../middleware/customerDataValidators");
+const authenticateUser = require("../middleware/authentication");
 
-router.get("/getAllCustomersData", getAllCustomersData);
-router.post("/createCustomerData", createCustomerData);
-router.get("/getCustomerData/:customerId", getCustomerDataById);
-router.put("/updateCustomerData/:customerId", updateCustomerData);
-router.delete("/deleteCustomerData/:customerId", deleteCustomerData);
+router.get("/getAllCustomersData", authenticateUser, getAllCustomersData);
+router.post(
+  "/createCustomerData",
+  authenticateUser,
+  ValidateCreateCustomerData,
+  createCustomerData
+);
+router.get(
+  "/getCustomerData/:customerId",
+  authenticateUser,
+  ValidateIdString,
+  getCustomerDataById
+);
+router.put(
+  "/updateCustomerData/:customerId",
+  authenticateUser,
+  ValidateIdString,
+  ValidateUpdateCustomerData,
+  updateCustomerData
+);
+router.delete(
+  "/deleteCustomerData/:customerId",
+  authenticateUser,
+  ValidateIdString,
+  deleteCustomerData
+);
 
 module.exports = router;

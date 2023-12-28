@@ -1,19 +1,34 @@
 const Users = require("../models/Users");
-// const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-// const fetchuser = require("../middleware/fetchuser");
 
 // Create a new User:
 const createUser = async (req, res) => {
   try {
-    // check whether the user with this email already exists or not:
-    let user = await Users.findOne({ email: req.body.email });
-
+    let user = await Users.findOne({
+      $or: [
+        { username: req.body.username },
+        { email: req.body.email },
+        { phoneNo: req.body.phoneNo },
+      ],
+    });
     if (user) {
-      return res
-        .status(400)
-        .json({ message: "Sorry a user with this email already exists." });
+      if (user.username === req.body.username) {
+        return res
+          .status(400)
+          .json({ message: "Sorry a user with this username already exists." });
+      }
+
+      if (user.email === req.body.email) {
+        return res
+          .status(400)
+          .json({ message: "Sorry a user with this email already exists." });
+      }
+      if (user.phoneNo === req.body.phoneNo) {
+        return res.status(400).json({
+          message: "Sorry a user with this phone number already exists.",
+        });
+      }
     }
 
     //hashing and adding salt to the password:
@@ -29,7 +44,8 @@ const createUser = async (req, res) => {
       address: req.body.address,
       salary: req.body.salary,
       age: req.body.age,
-      dateOfBirth: req.body.dateOfBirth,
+      gender: req.body.gender,
+      dob: req.body.dob,
     });
 
     return res.status(200).json({ message: "User created successfully." });
@@ -44,18 +60,12 @@ const createUser = async (req, res) => {
 //Get All Users:
 const getAllUsers = async (req, res) => {
   try {
-    // console.log(
-    //   jwt.verify(
-    //     req.headers.cookie?.split("authToken=")[1],
-    //     process.env.JWT_SECRET
-    //   )
-    // );
     const users = await Users.find();
-
     if (users.length) {
-      return res.status(200).json(users);
+      res.status(200).json(users);
+    } else {
+      res.status(404).json({ message: "There isn't any Users yet." });
     }
-    return res.status(404).json({ message: "There isn't any Users yet." });
   } catch (error) {
     console.error(error.message);
 
@@ -84,6 +94,7 @@ const loginUser = async (req, res) => {
     const data = {
       id: user.id,
       username: user.username,
+      role: user.role,
     };
     const authToken = jwt.sign(data, process.env.JWT_SECRET); //returns a promise
 
@@ -124,6 +135,33 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
+    if (req.body.username || req.body.email || req.body.phoneNo) {
+      const user = await Users.findOne({
+        $or: [
+          { username: req.body.username },
+          { email: req.body.email },
+          { phoneNo: req.body.phoneNo },
+        ],
+      });
+      if (user && user.id !== id) {
+        if (user.username === req.body.username) {
+          return res.status(400).json({
+            message: "Sorry a user with this username already exists.",
+          });
+        }
+
+        if (user.email === req.body.email) {
+          return res
+            .status(400)
+            .json({ message: "Sorry a user with this email already exists." });
+        }
+        if (user.phoneNo === req.body.phoneNo) {
+          return res.status(400).json({
+            message: "Sorry a user with this phone number already exists.",
+          });
+        }
+      }
+    }
 
     const user = await Users.findByIdAndUpdate(id, req.body);
 

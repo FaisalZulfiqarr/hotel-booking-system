@@ -7,11 +7,28 @@ const {
   updateRoom,
   deleteRoom,
 } = require("../controllers/rooms");
+const authenticateUser = require("../middleware/authentication");
+const {
+  ValidateCreateRoom,
+  ValidateIdString,
+  ValidateUpdateRoom,
+} = require("../middleware/roomValidators");
 
-router.get("/getAllRooms", getAllRooms);
-router.post("/createRoom", createRoom);
-router.get("/getRoom/:roomId", getRoomById);
-router.put("/updateRoom/:roomId", updateRoom);
-router.delete("/deleteRoom/:roomId", deleteRoom);
+router.get("/getAllRooms", authenticateUser, getAllRooms);
+router.post("/createRoom", authenticateUser, ValidateCreateRoom, createRoom);
+router.get("/getRoom/:roomId", authenticateUser, ValidateIdString, getRoomById);
+router.put(
+  "/updateRoom/:roomId",
+  authenticateUser,
+  ValidateIdString,
+  ValidateUpdateRoom,
+  updateRoom
+);
+router.delete(
+  "/deleteRoom/:roomId",
+  authenticateUser,
+  ValidateIdString,
+  deleteRoom
+);
 
 module.exports = router;

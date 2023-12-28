@@ -1,7 +1,5 @@
 const Bookings = require("../models/Bookings");
-// const { body, validationResult } = require("express-validator");
 
-// const fetchuser = require("../middleware/fetchuser");
 const jwt = require("jsonwebtoken");
 
 // Create a new  Booking:
@@ -12,22 +10,17 @@ const createBooking = async (req, res) => {
       process.env.JWT_SECRET
     );
 
-    // check whether the room with this room number already exists or not:
-    let booking = await Bookings.findOne({ number: req.body.number });
-
-    if (booking) {
-      return res.status(400).json({
-        message: "Sorry a room with this room number already exists.",
-      });
-    }
-
-    booking = await Bookings.create({
+    const booking = await Bookings.create({
+      bookingName: req.body.bookingName,
+      roomIds: req.body.roomIds,
+      customerId: req.body.customerId,
       status: req.body.status,
-      number: req.body.number,
-      floor: req.body.floor,
-      beds: req.body.beds,
-      type: req.body.type,
-      ratePerDay: req.body.ratePerDay,
+      payment: req.body.payment,
+      paidAmount: req.body.paidAmount,
+      paymentFlag: req.body.paymentFlag,
+      startDate: req.body.startDate,
+      endDate: req.body.endDate,
+
       createdAt: Date.now(),
       modifiedAt: Date.now(),
       createdBy: user.username,
