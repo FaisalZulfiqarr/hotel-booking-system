@@ -9,7 +9,7 @@ const createUser = async (req, res) => {
       $or: [
         { username: req.body.username },
         { email: req.body.email },
-        { phoneNo: req.body.phoneNo },
+        { phoneNo: parseInt(req.body.phoneNo) },
       ],
     });
     if (user) {
@@ -24,7 +24,7 @@ const createUser = async (req, res) => {
           .status(400)
           .json({ message: "Sorry a user with this email already exists." });
       }
-      if (user.phoneNo === req.body.phoneNo) {
+      if (user.phoneNo === parseInt(req.body.phoneNo)) {
         return res.status(400).json({
           message: "Sorry a user with this phone number already exists.",
         });
@@ -40,7 +40,7 @@ const createUser = async (req, res) => {
       role: "admin",
       password: secPass,
       email: req.body.email,
-      phoneNo: req.body.phoneNo,
+      phoneNo: parseInt(req.body.phoneNo),
       address: req.body.address,
       salary: req.body.salary,
       age: req.body.age,

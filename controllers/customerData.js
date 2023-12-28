@@ -1,4 +1,5 @@
 const CustomerData = require("../models/CustomerData");
+const Bookings = require("../models/Bookings");
 
 const jwt = require("jsonwebtoken");
 
@@ -129,12 +130,19 @@ const updateCustomerData = async (req, res) => {
 const deleteCustomerData = async (req, res) => {
   try {
     const { customerId } = req.params;
+    const booking = await Bookings.find({ customerId: customerId });
+    console.log("booking", booking);
+    if (booking.length) {
+      return res.status(400).json({
+        message: "Customer cannot be deleted as it has a booking.",
+      });
+    }
 
     const customerData = await CustomerData.findByIdAndDelete(customerId);
 
     if (customerData) {
       return res.status(200).json({
-        message: "CustomerData deleted successfully.",
+        message: "Customer deleted successfully.",
       });
     }
 

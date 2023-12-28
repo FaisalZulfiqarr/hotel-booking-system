@@ -9,7 +9,7 @@ This repository contains the microservice implementation of a Hotel Booking Syst
 3. Technologies Used
 4. Authentication
 5. Password Encryption
-6. .env File Setup:
+6. .env File Setup
 7. API EndPoints Documentation
 8. Assumptions
 
@@ -55,3 +55,4 @@ The documentation for all the API endpoints for this project is given in this li
 1. I am charging customer for a booking of a room on per day basis not hourly.
 2. Room would have unique room number in the hotel.
 3. There are 2 user roles one is `admin`(all user related routes are accessible by this role only) and the other is `receptionist`.
+4. There should be a cron-job or scheduler which will trigger one day after the end date of booking to update its status to complete if it remained confirmed. But as it was out of the scope of this test description so I just modified the apis to handle if status completed is hit by update api.

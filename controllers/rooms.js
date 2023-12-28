@@ -1,4 +1,5 @@
 const Rooms = require("../models/Rooms");
+const Bookings = require("../models/Bookings");
 const jwt = require("jsonwebtoken");
 
 // Create a new Room:
@@ -79,8 +80,6 @@ const getRoomById = async (req, res) => {
 const updateRoom = async (req, res) => {
   try {
     const { roomId } = req.params;
-
-    // check whether the room with this room number already exists or not:
     if (req.body.number) {
       const room = await Rooms.findOne({ number: req.body.number });
       if (room && room.id !== roomId) {
@@ -118,7 +117,12 @@ const updateRoom = async (req, res) => {
 const deleteRoom = async (req, res) => {
   try {
     const { roomId } = req.params;
-
+    const booking = await Bookings.find({ roomIds: { $in: [roomId] } });
+    if (booking.length) {
+      return res.status(400).json({
+        message: "Room cannot be deleted as it is already booked.",
+      });
+    }
     const room = await Rooms.findByIdAndDelete(roomId);
 
     if (room) {

@@ -2,6 +2,13 @@ const jwt = require("jsonwebtoken");
 
 const authenticateUser = (req, res, next) => {
   const token = req.headers.cookie?.split("authToken=")[1];
+  const specialPath = [
+    "createUser",
+    "getAllUsers",
+    "getUser",
+    "updateUser",
+    "deleteUser",
+  ];
 
   if (!token) {
     return res.status(401).send({ error: "Please login first." });
@@ -14,16 +21,7 @@ const authenticateUser = (req, res, next) => {
 
       const path = req.route.path.split("/")[1];
 
-      if (
-        decoded.role === "receptionist" &&
-        [
-          "createUser",
-          "getAllUsers",
-          "getUser",
-          "updateUser",
-          "deleteUser",
-        ].includes(path)
-      ) {
+      if (decoded.role === "receptionist" && specialPath.includes(path)) {
         res.status(401).send({ error: "Authentication failed" });
       } else {
         next();

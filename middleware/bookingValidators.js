@@ -10,9 +10,6 @@ const ValidateCreateBooking = [
   body("customerId")
     .isString()
     .withMessage("The customerId is must and should be a string."),
-  body("status")
-    .isString()
-    .withMessage("The status is must and should be an string."),
   body("payment")
     .isInt()
     .withMessage("The payment is must and should be an integer."),
