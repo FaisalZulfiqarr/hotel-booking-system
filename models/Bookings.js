@@ -3,12 +3,14 @@ const { Schema } = mongoose;
 
 const BookingsSchema = new Schema({
   bookingName: { type: String, required: true },
-  roomId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "rooms",
-    required: true,
-    unique: true,
-  },
+  roomIds: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "rooms",
+      required: true,
+      //   unique: true,
+    },
+  ],
   customerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "customerData",
@@ -30,5 +32,4 @@ const BookingsSchema = new Schema({
   modifiedBy: { type: String, required: true },
 });
 const Bookings = mongoose.model("bookings", BookingsSchema);
-// Rooms.ensureIndex({ number: 1, floor: 1 }, { unique: true });
 module.exports = Bookings;

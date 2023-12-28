@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const RoomsSchema = new Schema({
   status: { type: String, required: true },
-  number: { type: String, required: true },
+  number: { type: String, required: true, unique: true },
   floor: { type: String, required: true },
   beds: { type: Number, required: true },
   type: { type: String, required: true },
